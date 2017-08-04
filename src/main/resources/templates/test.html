@@ -93,14 +93,15 @@
         		info+="  $password:"+o.password;
         		alert(info);
         		
+        		//发送Ajax到后台，成功！
         		$.ajax({
-        			type:'get',
-        			url:'jsonData'
-        			dataType:'json',
-        			success:function(jsonData){
-        				console.dir(jsonData);
+        			type:"GET",
+                    url:"jsonData",
+                    dataType:"json",
+                    success: function(data) {
+        				console.dir(data);
         				alert('fine')
-        			}
+                    }
         		});
         		
         	}
