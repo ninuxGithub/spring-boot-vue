@@ -11,7 +11,17 @@
     
     <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
-    <title th:text="#{app.title}">Magneto</title>
+    <title>Magneto Test</title>
+    <style>
+		.active {
+			width: 50px;
+			height: 50px;
+			background: green;
+		}	
+		.text-danger {
+			font-style: '#FF0000';
+		}
+	</style>
 </head>
 <body>
 <nav class="navbar navbar-inverse" th:fragment="header">
@@ -39,8 +49,143 @@
 </nav>
 <div id="app" class="container">
     <span th:text="#{app.title}"></span>
-    {{message}}
+    {{message | capitalize}}
     
+	<pre>v-bind:href<a v-bind:href="url">菜鸟教程</a></pre>
+	v-model
+	<input v-model="message"/>
+	v-on:click
+	<button v-on:click="clickBtn">反转字符串</button>
+	<br/>
+	v-if: <p v-if="seen">是否可以看见的p标签</p>
+	
+	<template v-if="ok">
+		<pre>
+			public static void main(String[] args){
+				System.out.println("hello world");
+			}
+		</pre>
+	</template>
+	
+	flag:{{flag}}    random: {{random}}<br/>
+	v-if v-else
+	<div v-if="flag==true">
+		大于0.5
+	</div>
+	<div v-else-if="flag==false">
+		小于或等于0.5
+	</div>
+	
+	v-show:
+	<h1 v-show="ok">Hello!</h1>
+	
+	
+	v-for循环
+	<ol>
+		<li v-for="site in sites">
+			{{site.name}}
+		</li>
+	</ol>
+	
+	value迭代
+	<ul>
+		<li v-for="obj in object">
+			{{obj}}
+		</li>
+	</ul>
+	key-value 迭代
+	<ul>
+		<li v-for="(key, value) in object">
+			{{key}}:{{value}}
+		</li>
+	</ul>
+	
+	v-for template
+	<ul>
+		<template v-for="site in sites">
+			<li>{{site.name}}</li>
+			<li>-------------</li>
+		</template>
+	</ul>
+	
+	computed:
+	<p><pre>计算后的字符串：{{message}}</pre></p>
+	
+	site:
+	<p>{{site}} </p>
+	
+	Class样式绑定：
+	<div v-bind:class="{active:isActive, 'text-danger': hasError}"></div>
+	<div v-bind:class="{'text-danger': hasError}">用户名错误</div>
+	
+	Style 内联样式
+	<div v-bind:style="{color:activeColor, fontSize: fontSize+'px'}">菜鸟教程</div>
+	
+	<h1>事件处理：</h1>
+	<button v-on:click="counter+=1">+1</button>
+	<p>点击了{{counter}}次！</p>
+	
+	<button v-on:click="greeting">Greeting</button>
+	
+	<form action="http://www.baidu.com">
+		<button v-on:keyup.13="submit">提交</button>
+		<input v-on:keyup.13="submit" value="submit"/>
+	</form>
+	
+	<h1>表单元素</h1>
+	<input v-model="message" placeholder="编辑我……"/><br/>
+	<textarea v-model="message" placeholder="多行文本输入……"></textarea>
+	
+	
+	<p>单个复选框：</p>
+  <input type="checkbox" id="checkbox" v-model="checked"/>
+  <label for="checkbox">{{ checked }}</label>
+    
+  <p>多个复选框：</p>
+  <input type="checkbox" id="runoob" value="Runoob" v-model="checkedNames"/>
+  <label for="runoob">Runoob</label>
+  <input type="checkbox" id="google" value="Google" v-model="checkedNames"/>
+  <label for="google">Google</label>
+  <input type="checkbox" id="taobao" value="Taobao" v-model="checkedNames"/>
+  <label for="taobao">taobao</label>
+  <span>选择的值为: {{ checkedNames }}</span>
+  <select v-model="selected" name="fruit">
+    <option value="">选择一个网站</option>
+    <option value="www.runoob.com">Runoob</option>
+    <option value="www.google.com">Google</option>
+  </select>
+  <div id="output">
+      选择的网站是: {{selected}}
+  </div>
+  
+  
+ 	 <!-- 在 "change" 而不是 "input" 事件中更新 -->
+	<input v-model.lazy="message" />
+	<input v-model.number="age" type="number"/>
+	 
+	 <h1>自定义的组件</h1>
+	 <runoob message="Author:hundsun engineer"></runoob>
+	 
+	 <input v-model="parentMsg"/>
+	 
+	 <runoob v-bind:message="parentMsg"></runoob>
+	 
+	 
+	 我是自定义的组件v-for 循环：
+	 <ol>
+	 	<todo-item v-for="item in sites" v-bind:todo="item"></todo-item>
+	 </ol>
+	 <p>{{total}}</p>
+	 <button-counter v-on:increment="increment2Total"></button-counter>
+	 <button-counter v-on:increment="increment2Total"></button-counter>
+	 <button-counter v-on:increment="increment2Total"></button-counter>
+	 
+	 自定义指令：
+	 <input v-focus=""/>
+	<br/>
+	<br/>
+	<br/>
+	
     <div class="panel panel-default">
         <div class="panel-heading text-center">
             <h2>User List</h2>
@@ -78,15 +223,77 @@
     </div>
 </div>
 <script th:inline="javascript">  
-	var userList = /*[[${session.users}]]*/  
-    new Vue({
+	var userList = /*[[${session.users}]]*/ 
+	var random = Math.random();
+	// 注册
+	Vue.component('runoob', {
+		props: ['message'],
+		template: '<div style="color:red;">{{message}} 自定义组件</div>'
+	})
+	Vue.component('todo-item', {
+		props: ['todo'],
+		template: '<li style="color:blue;">{{todo.name}}</li>'
+	})
+	Vue.component('button-counter',{
+		template:'<button v-on:click="increment">{{counter}}</button>',
+		data:function(){
+			return{
+				counter:0
+			}
+		},
+		methods:{
+			increment:function(){
+				this.counter+=1;
+				this.$emit('increment');
+			}
+		}
+	})
+	
+	//自定义指定
+	Vue.directive('focus', {
+	  // 当绑定元素插入到 DOM 中。
+	  inserted: function (el) {
+	    // 聚焦元素
+	    el.focus()
+	  }
+	})
+    var vm = new Vue({
         el: '#app',
         data: {
+			site:'old site value',        	
             message: 'Test Vue.js!',
-            users: userList
+            users: userList,
+            name:'Google',
+            url: 'http://www.runoob.com',
+            seen: true,
+            ok: true,
+            random: random,
+            flag : (random > 0.5?true:false),
+            sites: [
+                { name: 'Runoob' },
+                { name: 'Google' },
+                { name: 'Taobao' }
+              ],
+            object:{
+            	name:'java',
+            	url:'http://www.runoob.com',
+            	slogan:'菜鸟教程'
+            },
+            isActive: true,
+            hasError: true,
+            activeColor: 'pink',
+            fontSize: 16,
+            counter: 0,
+            checked : true,
+            checkedNames: [],
+            selected: 'www.google.com' ,
+            age:18,
+            parentMsg: '父节点',
+            total:0
+            
         },
         methods : {
-        	clickResponse(o){
+        	clickResponse:function(o){
         		console.dir(o);
         		var info = "$id :"+ o.id;
         		info+="  $username:"+o.username;
@@ -103,11 +310,49 @@
         				alert('fine')
                     }
         		});
-        		
+        	},
+        	clickBtn:function(){
+				this.message=this.message.split("").reverse().join('');
+        	},
+        	greeting:function(){
+        		alert('Good Morning!');
+        	},
+        	increment2Total:function(){
+        		this.total+=1;
         	}
         	
+        },
+        filters: {
+        	capitalize: function(value){
+        		if(!value) return '';
+        		value = value.toString();
+        		//全部大写
+        		return value.toUpperCase();
+        		//第一个字母大写
+        		//return value.charAt(0).toUpperCase() + value.slice(1);
+        	}
+        },
+        computed:{
+			reverseMessage: function(){
+				return this.message.split('').reverse().join('')
+			},
+			set:function(newValue){
+				var arr = newValue.split('-');
+				this.name=arr[0];
+				this.url=arr[1];
+			},
+			get:function(){
+				return this.name+"-"+this.url;
+			}
         }
     })
+    
+    //调用vm
+    vm.site='菜鸟教程-http://www.runoob.com';
+    document.write('name:'+ vm.name);
+    document.write('<br/>');
+    document.write('url:'+ vm.url);
+    
 </script>
 </body>
 </html>
