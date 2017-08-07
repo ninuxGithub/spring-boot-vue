@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.master.user.IUserService;
 import org.master.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,8 @@ import org.springframework.web.servlet.ModelAndView;
  */
 @Controller
 public class PublicController {
+	private static final Logger logger = LoggerFactory.getLogger(PublicController.class);
+	
 	@Autowired
 	private IUserService userService;
 
@@ -32,10 +36,10 @@ public class PublicController {
 	}
 	@RequestMapping("/test")
 	public ModelAndView test(ModelAndView model, HttpServletRequest request) {
+		logger.info("test page...");
 		List<User> users = userService.findAll();
 		request.getSession().setAttribute("users", users);
 		model.setViewName("test");
-		System.out.println(users);
 		return model;
 	}
 	
