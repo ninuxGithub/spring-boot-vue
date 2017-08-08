@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <!-- default header name is X-CSRF-TOKEN -->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/vue/1.0.24/vue.min.js"></script>
+    <title th:text="#{app.title}">Magneto</title>
+</head>
+<body>
+<nav class="navbar navbar-inverse" th:fragment="header">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/" th:text="#{app.title}"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home <span class="sr-only">(current)</span></a></li>
+                <li><a href="/user/info">User</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div id="app" class="container">
+    <span th:text="#{app.title}"></span>
+    {{message}}
+    
+    <div class="panel panel-default">
+        <div class="panel-heading text-center">
+            <h2>input</h2>
+        </div>
+        
+        <div class="panel-body">
+        	<form action="#" th:action="@{/inputUser}"   method="POST">
+	        	<table class="table table-hover">
+	        		<tr>
+	        			<td><label>用户名称：</label></td>
+	        			<td>
+	        				<!-- 在修改的时候需要携带Id到后台 -->
+	        				<input type="hidden" name="id" v-model="{{user.id}}" />
+	        				<input type="text" name="username" v-model="{{user.username}}" />
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td><label>密码</label></td>
+	        			<td><input type="password" name="password" v-model="{{user.password}}"/></td>
+	        		</tr>
+	        		<tr>
+	        			<td><label>角色</label></td>
+	        			<td>
+<!-- 	        				<input type="text" name="role" th:value="*{role}"/> -->
+<!-- 	        				<select v-model="role" name="role" th:value="*{role}"> -->
+<!-- 						    <option value="">选择一个角色</option> -->
+<!-- 						    <option v-for="(key, value) in roles" value="{{value}}">{{key}}</option> -->
+<!-- 						  </select> -->
+	        			</td>
+	        		</tr>
+	        		<tr>
+	        			<td colspan="2">
+<!-- 		        			<input class="btn btn-info"  type="submit" v-if="{{user.id==null}}" value="Create"/>   -->
+<!-- 		        			<input class="btn btn-info"  type="submit" v-if="{{user.id!=null}}" value="Modify"/>   -->
+	        			</td>
+	        		</tr>
+	        	</table>
+        	</form>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">  
+	var userList = /*[[${session.users}]]*/  
+	var user = /*[[${session.user}]]*/  
+	if(user.id==null){
+		user.id='';
+	}
+	if(user.username==null){
+		user.username='';
+	}
+	if(user.password==null){
+		user.password='';
+	}
+	
+	console.dir(user)
+    new Vue({
+        el: '#app',
+        data: {
+            message: 'Test Vue.js!',
+            users: userList,
+            user:user
+        }
+    })
+</script>
+</body>
+</html>
